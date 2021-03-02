@@ -1,0 +1,14 @@
+[webservers]
+devA
+devB
+devC
+
+[haproxy]
+devhaproxy
+
+[bastion] 
+bastionET2598
+
+[all:vars]
+ansible_user=ubuntu
+ansible_python_interpreter = /usr/bin/python3

@@ -1,0 +1,36 @@
+## ~/.ssh/config ##
+
+Host bastionET2598
+    Hostname 45.114.123.169
+    user ubuntu
+    IdentityFile ~/.ssh/id_rsa
+    StrictHostKeyChecking no
+    ForwardAgent yes
+
+Host devA
+    Hostname 10.6.0.181
+    user ubuntu
+    IdentityFile ~/.ssh/id_rsa
+    StrictHostKeyChecking no
+    ProxyCommand ssh bastionET2598 -W %h:%p
+
+Host devB
+    Hostname 10.6.0.125
+    user ubuntu
+    IdentityFile ~/.ssh/id_rsa
+    StrictHostKeyChecking no
+    ProxyCommand ssh bastionET2598 -W %h:%p
+    
+Host devC
+    Hostname 10.6.0.163 
+    user ubuntu
+    IdentityFile ~/.ssh/id_rsa
+    StrictHostKeyChecking no
+    ProxyCommand ssh bastionET2598 -W %h:%p
+    
+Host devhaproxy
+    Hostname 10.6.0.59
+    user ubuntu
+    IdentityFile ~/.ssh/id_rsa
+    StrictHostKeyChecking no
+    ProxyCommand ssh bastionET2598 -W %h:%p        
