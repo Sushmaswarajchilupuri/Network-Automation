@@ -1,0 +1,14 @@
+frontend http
+    bind *:80
+    timeout client 100ms
+    mode http
+    default_backend servers
+
+backend servers
+    balance roundrobin
+    timeout connect 1200s
+    timeout server 1200s
+    mode http
+{%  for server in groups['webservers'] %}
+    server {{ hostvars[server]['inventory_hostname'] }} {{ hostvars[server]['ansible_default_ipv4']['address']}}:80 check
+{% endfor %}

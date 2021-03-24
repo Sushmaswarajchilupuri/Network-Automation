@@ -7,16 +7,14 @@
     http_port: "80"
 
   tasks:
-    - name: Update all apt packages on webservers group
+    - name: Update_packages
       apt:
         update_cache: yes
         state: present
 
-    - name: installing php7.4-fpm on webservers group
-      become: true
+    - name: Install nginx,php,php-fpm packages
       apt:
-        update_cache: yes
-        name: ['php7.4-fpm' , 'php']
+        name: ['nginx' , 'php' , 'php-fpm']
         state: latest
        
     - name: Remove apache2 packages
@@ -28,7 +26,7 @@
     
     - name: Configuration of nginx file
       template:
-        src: nginx.cfg
+        src: template/nginx.cfg.j2
         dest: /etc/nginx/sites-available/default
     
     - name: Serving Content from index.php to webservers
@@ -43,11 +41,16 @@
         port: "{{http_port}}"
         proto: tcp
        
-    - name: restart nginx
+    - name: Nginx service restarted
       service:
         name: nginx
         state: restarted
-      
+        
+- hosts: webservers
+  name: gathering facts
+  tasks:
+    - debug: var=ansible_all_ipv4_addresses        
+           
 - hosts: haproxy
   become: yes
   remote_user: ubuntu
@@ -61,12 +64,14 @@
 
     - name: Configuration of haproxy for loadbalancing
       template:
-        src: haproxy.cfg
+        src: template/haproxy.cfg.j2
         dest: /etc/haproxy/haproxy.cfg
  
     - name: haproxy service restart
       service:
         name: "haproxy"
         state: restarted
-
-
+     
+     
+     
+     
